@@ -2,7 +2,7 @@ import inputPrompt from "./cli-prompt/input.prompt.js";
 import listPrompt from "./cli-prompt/list.prompt.js";
 import CliService from "./services/cli.service.js";
 
-const { _get_frameworks_list, _get_action_list, _get_element_list, _fetching_element } = new CliService();
+const { _get_frameworks_list, _get_action_list, _get_element_list, _get_element, _download_code } = new CliService();
 
 // step : 1
 _get_frameworks_list(({ loading, data, error }) => {
@@ -114,7 +114,7 @@ function fetching_element({ framework, actionType, element }) {
             if (error) {
                console.log(error);
             }
-            _fetching_element({
+            _get_element({
                framework,
                actionType,
                element,
@@ -124,7 +124,10 @@ function fetching_element({ framework, actionType, element }) {
                      console.log("loading...");
                   }
                   if (data) {
-                     //console.log(data);
+                     download_code({
+                        data: data,
+                        name: answers.name,
+                     });
                   }
                   if (error) {
                      console.log(error);
@@ -135,7 +138,7 @@ function fetching_element({ framework, actionType, element }) {
       });
    }
    if (actionType === "fetching") {
-      _fetching_element({
+      _get_element({
          framework,
          actionType,
          element,
@@ -144,7 +147,9 @@ function fetching_element({ framework, actionType, element }) {
                console.log("loading...");
             }
             if (data) {
-               // console.log(data);
+               download_code({
+                  data: data,
+               });
             }
             if (error) {
                console.log(error);
@@ -152,4 +157,24 @@ function fetching_element({ framework, actionType, element }) {
          },
       });
    }
+}
+// step : 5
+function download_code({ data, name }) {
+   console.log({ data, name });
+   // _download_code({
+   //    name: name,
+   //    file: data.name,
+   //    download_url: data.download_url,
+   //    response: ({ loading, data, error }) => {
+   //       if (loading) {
+   //          console.log("downloading...");
+   //       }
+   //       if (data) {
+   //          console.log(data);
+   //       }
+   //       if (error) {
+   //          console.log(error);
+   //       }
+   //    },
+   // });
 }

@@ -83,7 +83,8 @@ export default class CliService {
          });
       }
    }
-   async _fetching_element({ framework, actionType, element, name, response }) {
+
+   async _get_element({ framework, actionType, element, name, response }) {
       try {
          response({
             loading: true,
@@ -91,27 +92,45 @@ export default class CliService {
          let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}`);
 
          if (data) {
-            //creating
-            if (name) {
-               let [file] = data;
-               console.log(file);
-               response({
-                  loading: false,
-                  data: data,
-               });
-            }
-            //fetching
-            else {
-               let [file] = data;
-               console.log(file);
-               response({
-                  loading: false,
-                  data: data,
-               });
-            }
+            console.log(data);
+            let res_array = [];
+            data.forEach((item) => {
+               if (item?.type === "dir") {
+                  res_array.push(item.name);
+               }
+            });
+            response({
+               loading: false,
+               data: res_array,
+            });
          }
       } catch (error) {
          console.log(error);
+         response({
+            loading: false,
+            error: error?.response?.data,
+         });
+      }
+   }
+   async _download_code({ name, file, download_url, response }) {
+      try {
+         response({
+            loading: true,
+         });
+         const { data } = await axios.get(download_url);
+         if (data) {
+            if (name) {
+               let [, extension] = file.split(".");
+               let fileName = name + "." + extension;
+               console.log(fileName);
+            }
+            let modifiedData = data.replace(/PlaceHolder/g, name);
+            response({
+               loading: false,
+               data: modifiedData,
+            });
+         }
+      } catch (error) {
          response({
             loading: false,
             error: error?.response?.data,
