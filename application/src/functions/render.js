@@ -48,7 +48,12 @@ import fs from "fs";
 export default function render({ response, name }) {
    fs.createWriteStream(`${name}`);
    fs.appendFile(`${name}`, response, (error, data) => {
-      console.log(data);
+      if (data) {
+         console.log(data);
+      }
+      if (error) {
+         console.log(error);
+      }
    });
    // fs.readFile(response, "utf-8", (error, dataRes) => {
    //    if (error) {

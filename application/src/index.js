@@ -124,9 +124,12 @@ function fetching_element({ framework, actionType, element }) {
                      console.log("loading...");
                   }
                   if (data) {
-                     download_code({
+                     get_element_files({
+                        framework,
+                        actionType,
                         data: data,
                         name: answers.name,
+                        element,
                      });
                   }
                   if (error) {
@@ -147,8 +150,11 @@ function fetching_element({ framework, actionType, element }) {
                console.log("loading...");
             }
             if (data) {
-               download_code({
+               get_element_files({
+                  framework,
+                  actionType,
                   data: data,
+                  element,
                });
             }
             if (error) {
@@ -159,8 +165,38 @@ function fetching_element({ framework, actionType, element }) {
    }
 }
 // step : 5
-function download_code({ data, name }) {
-   console.log({ data, name });
+function get_element_files({ framework, actionType, data, element, name }) {
+   listPrompt({
+      questionObj: {
+         type: "list",
+         message: `select ${element} file list?`,
+         name: "file",
+         choices: data,
+      },
+      callback: ({ answers, error }) => {
+         if (error) {
+            console.log(error);
+         }
+         _download_code({
+            framework,
+            actionType,
+            file: answers.file,
+            element: element,
+            name: name,
+            response: ({ loading, data, error }) => {
+               if (loading) {
+                  console.log("please wait...");
+               }
+               if (data) {
+                  console.log(data);
+               }
+               if (error) {
+                  console.log(error);
+               }
+            },
+         });
+      },
+   });
    // _download_code({
    //    name: name,
    //    file: data.name,

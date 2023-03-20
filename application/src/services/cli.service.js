@@ -95,7 +95,7 @@ export default class CliService {
             console.log(data);
             let res_array = [];
             data.forEach((item) => {
-               if (item?.type === "dir") {
+               if (item?.type === "file") {
                   res_array.push(item.name);
                }
             });
@@ -112,23 +112,28 @@ export default class CliService {
          });
       }
    }
-   async _download_code({ name, file, download_url, response }) {
+   async _download_code({ framework, actionType, element, file, name, response }) {
       try {
          response({
             loading: true,
          });
-         const { data } = await axios.get(download_url);
-         if (data) {
+         let res = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}/${file}`);
+
+         if (res.data) {
+            let { data } = await axios.get(res?.data?.download_url);
+            response({
+               loading: false,
+               data: data,
+            });
+
             if (name) {
                let [, extension] = file.split(".");
                let fileName = name + "." + extension;
-               console.log(fileName);
+               let modifiedData = data.replace(/PlaceHolder/g, name);
+               render({ response: modifiedData, name: fileName });
+            } else {
+               render({ response: data, name: file });
             }
-            let modifiedData = data.replace(/PlaceHolder/g, name);
-            response({
-               loading: false,
-               data: modifiedData,
-            });
          }
       } catch (error) {
          response({
