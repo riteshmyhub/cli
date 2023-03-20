@@ -7,7 +7,7 @@ export default class CliService {
 
    async _fetching_api({ framework, element }) {
       try {
-         const { data } = await axios.get(`${this.baseUrl}/src/code/${framework}/components/component.jsx`);
+         const { data } = await axios.get(`${this.baseUrl}/source-code/${framework}/fetching/component.jsx`);
          console.log(data);
       } catch (error) {
          console.log(error.response.data);
@@ -16,7 +16,7 @@ export default class CliService {
 
    async _creating_api({ framework, element }) {
       try {
-         const { data } = await axios.get(`${this.baseUrl}/src/code/${framework}/components/component.jsx`);
+         const { data } = await axios.get(`${this.baseUrl}/source-code/${framework}/creating/${element}/component.jsx`);
          console.log(data);
       } catch (error) {
          console.log(error.response.data);
