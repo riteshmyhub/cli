@@ -1,21 +1,7 @@
 import inputPrompt from "./cli-prompt/input.prompt.js";
 import listPrompt from "./cli-prompt/list.prompt.js";
-import { mode_view_component, _componentCreate, _hookCreate } from "./functions/functions.js";
+import CliService from "./services/cli.service.js";
 import CLIService from "./services/cli.service.js";
-
-// listPrompt((list) => {
-//    // inputPrompt((input) => {
-//    //    if (list?.answers === "component") {
-//    //       //_componentCreate({ name: input?.answers });
-//    //    }
-//    //    if (list?.answers === "hook") {
-//    //       // _hookCreate({ name: input?.answers });
-//    //    }
-//    //    if (list?.answers === "mode-view-component") {
-//    //       // mode_view_component({ name: input?.answers });
-//    //    }
-//    // });
-// });
 
 function selectFramework() {
    listPrompt({
@@ -118,4 +104,6 @@ function create_element(framework, elememt) {
       },
    });
 }
-selectFramework();
+//selectFramework();
+const name = new CliService();
+name.test();
