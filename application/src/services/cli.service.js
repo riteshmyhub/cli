@@ -65,6 +65,7 @@ export default class CliService {
          });
          let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}`);
          let res_array = [];
+         console.log(data);
          if (data) {
             data.forEach((item) => {
                if (item?.type === "dir") {
