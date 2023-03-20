@@ -1,109 +1,155 @@
 import inputPrompt from "./cli-prompt/input.prompt.js";
 import listPrompt from "./cli-prompt/list.prompt.js";
 import CliService from "./services/cli.service.js";
-import CLIService from "./services/cli.service.js";
 
-function selectFramework() {
-   listPrompt({
-      questionObj: {
-         type: "list",
-         message: "please select framework",
-         name: "framework",
-         choices: ["react", "angular"],
-      },
-      callback: ({ answers, error }) => {
-         if (error) {
-            console.log("error");
-         }
-         actionType(answers?.framework);
-      },
-   });
-}
+const { _get_frameworks_list, _get_action_list, _get_element_list, _fetching_element } = new CliService();
 
+// step : 1
+_get_frameworks_list(({ loading, data, error }) => {
+   if (loading) {
+      console.log("loading...");
+   }
+   if (data) {
+      listPrompt({
+         questionObj: {
+            type: "list",
+            message: "please select framework",
+            name: "framework",
+            choices: data,
+         },
+         callback: ({ answers, error }) => {
+            if (error) {
+               console.log(error);
+            }
+            actionType(answers?.framework);
+         },
+      });
+   }
+   if (error) {
+      console.log("error");
+   }
+});
+
+// step : 2
 function actionType(framework) {
-   listPrompt({
-      questionObj: {
-         type: "list",
-         message: `what are your action type in ${framework}?`,
-         name: "actionType",
-         choices: ["create", "fetching"],
-      },
-      callback: ({ answers, error }) => {
+   _get_action_list({
+      framework: framework,
+      response: ({ loading, data, error }) => {
+         if (loading) {
+            console.log("loading...");
+         }
+         if (data) {
+            listPrompt({
+               questionObj: {
+                  type: "list",
+                  message: `what are your action type in ${framework}?`,
+                  name: "actionType",
+                  choices: data,
+               },
+               callback: ({ answers, error }) => {
+                  if (error) {
+                     console.log(error);
+                  }
+                  if (answers) {
+                     elementList({
+                        framework: framework,
+                        actionType: answers?.actionType,
+                     });
+                  }
+               },
+            });
+         }
          if (error) {
             console.log("error");
-         }
-         if (answers.actionType === "create") {
-            creating(framework);
-         }
-         if (answers.actionType === "fetching") {
-            fetching(framework);
          }
       },
    });
 }
 
-function fetching(framework) {
-   console.log(framework);
-}
-
-function creating(framework) {
-   let list = [];
-   if (framework === "react") {
-      let array = list.concat(["component", "hook", "mv-component"]);
-      listPrompt({
-         questionObj: {
-            type: "list",
-            message: `select creating element in ${framework}?`,
-            name: "element",
-            choices: array,
-         },
-         callback: ({ answers, error }) => {
-            if (error) {
-               console.log("error");
-            }
-            create_element(framework, answers.element);
-         },
-      });
-   }
-   if (framework === "angular") {
-      let array = list.concat(["@component", "@directive"]);
-      listPrompt({
-         questionObj: {
-            type: "list",
-            message: `select creating element in ${framework}?`,
-            name: "element",
-            choices: array,
-         },
-         callback: ({ answers, error }) => {
-            if (error) {
-               console.log("error");
-            }
-            create_element(framework, answers.element);
-         },
-      });
-   }
-}
-
-function create_element(framework, elememt) {
-   inputPrompt({
-      questionObj: {
-         type: "input",
-         name: "name",
-         message: `enter ${elememt} name`,
-      },
-      callback: ({ answers, error }) => {
+// step : 3
+function elementList({ framework, actionType }) {
+   _get_element_list({
+      framework,
+      actionType,
+      response: ({ loading, data, error }) => {
+         if (loading) {
+            console.log("loading...");
+         }
+         if (data) {
+            listPrompt({
+               questionObj: {
+                  type: "list",
+                  message: `select ${actionType} element in ${framework}?`,
+                  name: "element",
+                  choices: data,
+               },
+               callback: ({ answers, error }) => {
+                  if (error) {
+                     console.log("error");
+                  }
+                  fetching_element({
+                     framework,
+                     actionType,
+                     element: answers.element,
+                  });
+               },
+            });
+         }
          if (error) {
             console.log("error");
          }
-         const { _creating_api } = new CLIService();
-         _creating_api({
-            framework: framework,
-            element: elememt,
-            name: answers.name,
-         });
       },
    });
 }
-//selectFramework();
-const name = new CliService();
-name.test();
+// step : 4
+function fetching_element({ framework, actionType, element }) {
+   if (actionType === "creating") {
+      inputPrompt({
+         questionObj: {
+            type: "input",
+            name: "name",
+            message: `enter ${element} name`,
+         },
+         callback: ({ answers, error }) => {
+            if (error) {
+               console.log("error");
+            }
+            _fetching_element({
+               framework,
+               actionType,
+               element,
+               name: answers.name,
+               response: ({ loading, data, error }) => {
+                  if (loading) {
+                     console.log("loading...");
+                  }
+                  if (data) {
+                     //console.log(data);
+                  }
+                  if (error) {
+                     console.log(error);
+                  }
+               },
+            });
+         },
+      });
+   }
+   if (actionType === "fetching") {
+      _fetching_element({
+         framework,
+         actionType,
+         element,
+         response: ({ loading, data, error }) => {
+            if (loading) {
+               console.log("loading...");
+            }
+            if (data) {
+              // console.log(data);
+            }
+            if (error) {
+               console.log(error);
+            }
+         },
+      });
+   }
+}
