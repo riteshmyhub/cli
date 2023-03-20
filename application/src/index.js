@@ -197,20 +197,4 @@ function get_element_files({ framework, actionType, data, element, name }) {
          });
       },
    });
-   // _download_code({
-   //    name: name,
-   //    file: data.name,
-   //    download_url: data.download_url,
-   //    response: ({ loading, data, error }) => {
-   //       if (loading) {
-   //          console.log("downloading...");
-   //       }
-   //       if (data) {
-   //          console.log(data);
-   //       }
-   //       if (error) {
-   //          console.log(error);
-   //       }
-   //    },
-   // });
 }
