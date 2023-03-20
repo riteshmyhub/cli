@@ -4,6 +4,7 @@ export default class CliService {
    constructor() {}
 
    async _creating_api({ framework, element, name }) {
+      console.log({ framework, element, name });
       try {
          const { data } = await axios.get(`https://raw.githubusercontent.com/riteshmyhub/cli/master/source-code/${framework}/creating/${element}/${element}.jsx`);
          // name
