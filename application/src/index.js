@@ -75,7 +75,7 @@ function creating(framework) {
             if (error) {
                console.log("error");
             }
-            name_Elememt(answers.element);
+            create_element(framework, answers.element);
          },
       });
    }
@@ -92,13 +92,13 @@ function creating(framework) {
             if (error) {
                console.log("error");
             }
-            name_Elememt(answers.element);
+            create_element(framework, answers.element);
          },
       });
    }
 }
 
-function name_Elememt(elememt) {
+function create_element(framework, elememt) {
    inputPrompt({
       questionObj: {
          type: "input",
@@ -109,10 +109,11 @@ function name_Elememt(elememt) {
          if (error) {
             console.log("error");
          }
-         const api = new CLIService();
-         api._creating_api({
-            framework: "react",
-            element: answers.name,
+         const { _creating_api } = new CLIService();
+         _creating_api({
+            framework: framework,
+            element: elememt,
+            name: answers.name,
          });
       },
    });
