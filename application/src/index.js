@@ -26,7 +26,7 @@ _get_frameworks_list(({ loading, data, error }) => {
       });
    }
    if (error) {
-      console.log("error");
+      console.log(error);
    }
 });
 
@@ -85,7 +85,7 @@ function elementList({ framework, actionType }) {
                },
                callback: ({ answers, error }) => {
                   if (error) {
-                     console.log("error");
+                     console.log(error);
                   }
                   fetching_element({
                      framework,
@@ -96,7 +96,7 @@ function elementList({ framework, actionType }) {
             });
          }
          if (error) {
-            console.log("error");
+            console.log(error);
          }
       },
    });
@@ -112,7 +112,7 @@ function fetching_element({ framework, actionType, element }) {
          },
          callback: ({ answers, error }) => {
             if (error) {
-               console.log("error");
+               console.log(error);
             }
             _fetching_element({
                framework,
@@ -144,7 +144,7 @@ function fetching_element({ framework, actionType, element }) {
                console.log("loading...");
             }
             if (data) {
-              // console.log(data);
+               // console.log(data);
             }
             if (error) {
                console.log(error);
