@@ -92,7 +92,6 @@ export default class CliService {
          let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}`);
 
          if (data) {
-            console.log(data);
             let res_array = [];
             data.forEach((item) => {
                if (item?.type === "file") {
@@ -125,7 +124,6 @@ export default class CliService {
                loading: false,
                data: data,
             });
-
             if (name) {
                let [, extension] = file.split(".");
                let fileName = name + "." + extension;
