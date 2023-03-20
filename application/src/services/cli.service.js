@@ -24,10 +24,9 @@ export default class CliService {
             });
          }
       } catch (error) {
-         console.log(error?.response?.data?.message);
          response({
             loading: false,
-            error: "error",
+            error: error?.response?.data,
          });
       }
    }
@@ -54,7 +53,7 @@ export default class CliService {
       } catch (error) {
          response({
             loading: false,
-            error: "error",
+            error: error?.response?.data,
          });
       }
    }
@@ -80,7 +79,7 @@ export default class CliService {
       } catch (error) {
          response({
             loading: false,
-            error: "error",
+            error: error?.response?.data,
          });
       }
    }
@@ -115,7 +114,7 @@ export default class CliService {
          console.log(error);
          response({
             loading: false,
-            error: "error",
+            error: error?.response?.data,
          });
       }
    }
