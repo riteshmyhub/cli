@@ -1,25 +1,25 @@
 import axios from "axios";
 
-export default class CLIService {
+export default class CliService {
    constructor() {
-      this.baseUrl = `https://raw.githubusercontent.com/riteshmyhub/dnhsecheron/master`;
+      this.baseUrl = `https://raw.githubusercontent.com/riteshmyhub/cli/master`;
    }
 
-   async _test(actionCB) {
+   async _fetching_api({ framework, element }) {
       try {
-         actionCB({
-            loading: true,
-         });
-         const { data } = await axios.get(`${this.baseUrl}/src/styles.css`);
-         actionCB({
-            loading: false,
-            data: data,
-         });
+         const { data } = await axios.get(`${this.baseUrl}/src/code/${framework}/components/component.jsx`);
+         console.log(data);
       } catch (error) {
-         actionCB({
-            loading: false,
-            error: "fetch error",
-         });
+         console.log(error.response.data);
+      }
+   }
+
+   async _creating_api({ framework, element }) {
+      try {
+         const { data } = await axios.get(`${this.baseUrl}/src/code/${framework}/components/component.jsx`);
+         console.log(data);
+      } catch (error) {
+         console.log(error.response.data);
       }
    }
 }

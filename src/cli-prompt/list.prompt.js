@@ -1,17 +1,10 @@
 import inquirer from "inquirer";
 
-export default async function listPrompt(actionCB) {
+export default async function listPrompt({ questionObj, callback }) {
    try {
-      let answers = await inquirer.prompt([
-         {
-            type: "list",
-            message: "what do you want create in react",
-            name: "answers",
-            choices: ["hook", "component", "mode-view-component"],
-         },
-      ]);
-      actionCB(answers);
+      let answers = await inquirer.prompt([questionObj]);
+      callback({ answers: answers });
    } catch (error) {
-      console.log(error);
+      callback({ error: error });
    }
 }

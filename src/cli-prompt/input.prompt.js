@@ -1,17 +1,10 @@
 import inquirer from "inquirer";
 
-export default async function inputPrompt(actionCB) {
+export default async function inputPrompt({ questionObj, callback }) {
    try {
-      let answers = await inquirer.prompt([
-         {
-            type: "input",
-            name: "answers",
-            message: "enter component name",
-            choices: ["App"],
-         },
-      ]);
-      actionCB(answers);
+      let answers = await inquirer.prompt([questionObj]);
+      callback({ answers });
    } catch (error) {
-      console.log(error);
+      callback({ error });
    }
 }
