@@ -7,7 +7,6 @@ export default async function render({ download_url, fileName, name }) {
       if (data) {
          if (name) {
             let fName = fileName.replace("[PlaceHolder]", name);
-            console.log(fName);
             let modifiedData = data.replace(/PlaceHolder/g, name);
             createFile({ fileName: fName, code: modifiedData });
          } else {
