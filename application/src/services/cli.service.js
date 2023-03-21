@@ -65,7 +65,6 @@ export default class CliService {
          });
          let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}`);
          let res_array = [];
-         console.log(data);
          if (data) {
             data.forEach((item) => {
                if (item?.type === "dir") {
@@ -112,7 +111,7 @@ export default class CliService {
          });
       }
    }
-   async _download_code({ framework, actionType, element, file, name, response }) {
+   async _file_downlaod({ framework, actionType, element, file, name, response }) {
       try {
          response({
             loading: true,
@@ -120,19 +119,15 @@ export default class CliService {
          let res = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}/${file}`);
 
          if (res.data) {
-            let { data } = await axios.get(res?.data?.download_url);
+            render({
+               download_url: res?.data?.download_url,
+               fileName: file,
+               name: name,
+            });
             response({
                loading: false,
-               data: data,
+               data: "data",
             });
-            if (name) {
-               let [, extension] = file.split(".");
-               let fileName = name + "." + extension;
-               let modifiedData = data.replace(/PlaceHolder/g, name);
-               render({ response: modifiedData, name: fileName });
-            } else {
-               render({ response: data, name: file });
-            }
          }
       } catch (error) {
          response({
@@ -142,25 +137,32 @@ export default class CliService {
       }
    }
 
-   async _creating_api({ framework, element, name }) {
+   async _multi_file_downlaod({ framework, actionType, response }) {
       try {
-         process.stdout.write("loading.....");
-         const { data } = await axios.get(`https://raw.githubusercontent.com/riteshmyhub/cli/master/source-code/${framework}/creating/${element}/${element}.jsx`);
+         response({
+            loading: true,
+         });
+         let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}`);
          if (data) {
-            let modifiedData = data.replace(/PlaceHolder/g, name);
-            render({ response: modifiedData, name: name + ".jsx" });
+            let res = await axios.get(data[0].url);
+            if (res?.data) {
+               res?.data.forEach((element) => {
+                  render({
+                     download_url: element.download_url,
+                     fileName: element.name,
+                  });
+               });
+               response({
+                  loading: false,
+                  data: "file successfully download",
+               });
+            }
          }
       } catch (error) {
-         console.log(error.response.data);
-      }
-   }
-
-   async _fetching_api({ framework, element }) {
-      try {
-         const { data } = await axios.get(`https://raw.githubusercontent.com/riteshmyhub/cli/master/source-code/${framework}/fetching/component.jsx`);
-         console.log(data);
-      } catch (error) {
-         console.log(error.response.data);
+         response({
+            loading: false,
+            error: error?.response?.data,
+         });
       }
    }
 }
