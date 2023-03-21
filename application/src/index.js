@@ -3,7 +3,7 @@ import inputPrompt from "./cli-prompt/input.prompt.js";
 import listPrompt from "./cli-prompt/list.prompt.js";
 import CliService from "./services/cli.service.js";
 
-const { _get_frameworks_list, _get_action_list, _get_element_list, _get_element, _file_downlaod } = new CliService();
+const { _get_frameworks_list, _get_action_list, _get_element_list, _get_fetching_element_list, _file_downlaod } = new CliService();
 
 // step : 1
 _get_frameworks_list(({ loading, data, error }) => {
@@ -89,7 +89,7 @@ function elementList({ framework, actionType }) {
                   if (error) {
                      console.log(error);
                   }
-                  download_file({
+                  create_and_download_file({
                      framework,
                      actionType,
                      element: answers.element,
@@ -104,7 +104,7 @@ function elementList({ framework, actionType }) {
    });
 }
 // step : 4
-function download_file({ framework, actionType, element }) {
+function create_and_download_file({ framework, actionType, element }) {
    if (actionType === "creating") {
       inputPrompt({
          questionObj: {
@@ -139,5 +139,52 @@ function download_file({ framework, actionType, element }) {
       });
    }
    if (actionType === "fetching") {
+      _get_fetching_element_list({
+         framework,
+         actionType,
+         element,
+         response: ({ loading, data, error }) => {
+            if (loading) {
+               console.log("loading...");
+            }
+            if (data) {
+               listPrompt({
+                  questionObj: {
+                     type: "list",
+                     message: `which ${element} type do you want?`,
+                     name: "list",
+                     choices: data,
+                  },
+                  callback: ({ error, answers }) => {
+                     if (error) {
+                        console.log(error);
+                     }
+                     if (answers) {
+                        _file_downlaod({
+                           framework,
+                           actionType,
+                           element,
+                           fileName: answers?.list,
+                           response: ({ loading, data, error }) => {
+                              if (loading) {
+                                 console.log();
+                              }
+                              if (data) {
+                                 console.log(data);
+                              }
+                              if (error) {
+                                 console.log(error);
+                              }
+                           },
+                        });
+                     }
+                  },
+               });
+            }
+            if (error) {
+               console.log(error);
+            }
+         },
+      });
    }
 }

@@ -84,7 +84,7 @@ export default class CliService {
       }
    }
 
-   async _get_element({ framework, actionType, element, name, response }) {
+   async _get_fetching_element_list({ framework, actionType, element, response }) {
       try {
          response({
             loading: true,
@@ -93,7 +93,6 @@ export default class CliService {
 
          if (data) {
             let res_array = [];
-            console.log({ data });
             data.forEach((item) => {
                if (item?.type === "file") {
                   res_array.push(item.name);
@@ -113,24 +112,34 @@ export default class CliService {
       }
    }
 
-   async _file_downlaod({ framework, actionType, element, name, response }) {
+   async _file_downlaod({ framework, actionType, element, fileName, name, response }) {
       try {
          response({
             loading: true,
          });
-         let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}`);
-         if (data) {
-            data.forEach((item) => {
+         if (fileName) {
+            let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}/${fileName}`);
+            if (data) {
                render({
-                  download_url: item.download_url,
-                  fileName: item.name,
-                  name: name,
+                  download_url: data.download_url,
+                  fileName: data.name,
                });
-            });
-            response({
-               loading: false,
-               data: "file successfully download",
-            });
+            }
+         } else {
+            let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}`);
+            if (data) {
+               data.forEach((item) => {
+                  render({
+                     download_url: item.download_url,
+                     fileName: item.name,
+                     name: name,
+                  });
+               });
+               response({
+                  loading: false,
+                  data: "file successfully download",
+               });
+            }
          }
       } catch (error) {
          response({
