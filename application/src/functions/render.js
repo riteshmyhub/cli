@@ -6,10 +6,10 @@ export default async function render({ download_url, fileName, name }) {
       let { data } = await axios.get(download_url);
       if (data) {
          if (name) {
-            let [, extension] = file.split(".");
-            let fileName = name + "." + extension;
+            let [, extension] = fileName.split(".");
+            let fName = name + "." + extension;
             let modifiedData = data.replace(/PlaceHolder/g, name);
-            createFile({ fileName: fileName, code: modifiedData });
+            createFile({ fileName: fName, code: modifiedData });
          } else {
             createFile({ fileName: fileName, code: data });
          }
@@ -20,8 +20,8 @@ export default async function render({ download_url, fileName, name }) {
 }
 
 function createFile({ fileName, code }) {
-   fs.createWriteStream(`../${fileName}`);
-   fs.appendFile(`../${fileName}`, code, (error, data) => {
+   fs.createWriteStream(`${process.cwd()}/${fileName}`);
+   fs.appendFile(`${process.cwd()}/${fileName}`, code, (error, data) => {
       if (data) {
          console.log(data);
       }

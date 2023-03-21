@@ -93,6 +93,7 @@ export default class CliService {
 
          if (data) {
             let res_array = [];
+            console.log({ data });
             data.forEach((item) => {
                if (item?.type === "file") {
                   res_array.push(item.name);
@@ -111,52 +112,25 @@ export default class CliService {
          });
       }
    }
-   async _file_downlaod({ framework, actionType, element, file, name, response }) {
+
+   async _file_downlaod({ framework, actionType, element, name, response }) {
       try {
          response({
             loading: true,
          });
-         let res = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}/${file}`);
-
-         if (res.data) {
-            render({
-               download_url: res?.data?.download_url,
-               fileName: file,
-               name: name,
+         let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}`);
+         if (data) {
+            data.forEach((item) => {
+               render({
+                  download_url: item.download_url,
+                  fileName: item.name,
+                  name: name,
+               });
             });
             response({
                loading: false,
-               data: "data",
+               data: "file successfully download",
             });
-         }
-      } catch (error) {
-         response({
-            loading: false,
-            error: error?.response?.data,
-         });
-      }
-   }
-
-   async _multi_file_downlaod({ framework, actionType, response }) {
-      try {
-         response({
-            loading: true,
-         });
-         let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}`);
-         if (data) {
-            let res = await axios.get(data[0].url);
-            if (res?.data) {
-               res?.data.forEach((element) => {
-                  render({
-                     download_url: element.download_url,
-                     fileName: element.name,
-                  });
-               });
-               response({
-                  loading: false,
-                  data: "file successfully download",
-               });
-            }
          }
       } catch (error) {
          response({

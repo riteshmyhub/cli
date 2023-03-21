@@ -1,8 +1,9 @@
+#!/usr/bin/env node
 import inputPrompt from "./cli-prompt/input.prompt.js";
 import listPrompt from "./cli-prompt/list.prompt.js";
 import CliService from "./services/cli.service.js";
 
-const { _get_frameworks_list, _get_action_list, _get_element_list, _get_element, _file_downlaod, _multi_file_downlaod } = new CliService();
+const { _get_frameworks_list, _get_action_list, _get_element_list, _get_element, _file_downlaod } = new CliService();
 
 // step : 1
 _get_frameworks_list(({ loading, data, error }) => {
@@ -10,6 +11,7 @@ _get_frameworks_list(({ loading, data, error }) => {
       console.log("loading...");
    }
    if (data) {
+      console.log(data);
       listPrompt({
          questionObj: {
             type: "list",
@@ -81,36 +83,17 @@ function elementList({ framework, actionType }) {
                   type: "list",
                   message: `select ${actionType} element in ${framework}?`,
                   name: "element",
-                  choices: data.concat("download-all"),
+                  choices: actionType === "creating" ? data : data.concat("download-all"),
                },
                callback: ({ answers, error }) => {
                   if (error) {
                      console.log(error);
                   }
-
-                  if (answers.element === "download-all") {
-                     _multi_file_downlaod({
-                        framework,
-                        actionType,
-                        response: ({ loading, data, error }) => {
-                           if (loading) {
-                              console.log("loading...");
-                           }
-                           if (data) {
-                              console.log(data);
-                           }
-                           if (error) {
-                              console.log(error);
-                           }
-                        },
-                     });
-                  } else {
-                     fetching_element({
-                        framework,
-                        actionType,
-                        element: answers.element,
-                     });
-                  }
+                  download_file({
+                     framework,
+                     actionType,
+                     element: answers.element,
+                  });
                },
             });
          }
@@ -121,99 +104,40 @@ function elementList({ framework, actionType }) {
    });
 }
 // step : 4
-function fetching_element({ framework, actionType, element }) {
+function download_file({ framework, actionType, element }) {
    if (actionType === "creating") {
       inputPrompt({
          questionObj: {
             type: "input",
+            message: `enter ${element} name?`,
             name: "name",
-            message: `enter ${element} name`,
          },
-         callback: ({ answers, error }) => {
+         callback: ({ error, answers }) => {
             if (error) {
                console.log(error);
             }
-            _get_element({
-               framework,
-               actionType,
-               element,
-               name: answers.name,
-               response: ({ loading, data, error }) => {
-                  if (loading) {
-                     console.log("loading...");
-                  }
-                  if (data) {
-                     get_element_files({
-                        framework,
-                        actionType,
-                        data: data,
-                        name: answers.name,
-                        element,
-                     });
-                  }
-                  if (error) {
-                     console.log(error);
-                  }
-               },
-            });
+            if (answers.name) {
+               _file_downlaod({
+                  name: answers.name,
+                  framework,
+                  element,
+                  actionType,
+                  response: ({ loading, data, error }) => {
+                     if (loading) {
+                        console.log("loading...");
+                     }
+                     if (data) {
+                        console.log(data);
+                     }
+                     if (error) {
+                        console.log(error);
+                     }
+                  },
+               });
+            }
          },
       });
    }
    if (actionType === "fetching") {
-      _get_element({
-         framework,
-         actionType,
-         element,
-         response: ({ loading, data, error }) => {
-            if (loading) {
-               console.log("loading...");
-            }
-            if (data) {
-               get_element_files({
-                  framework,
-                  actionType,
-                  data: data,
-                  element,
-               });
-            }
-            if (error) {
-               console.log(error);
-            }
-         },
-      });
    }
-}
-// step : 5
-function get_element_files({ framework, actionType, data, element, name }) {
-   listPrompt({
-      questionObj: {
-         type: "list",
-         message: `select ${element} file list?`,
-         name: "file",
-         choices: data,
-      },
-      callback: ({ answers, error }) => {
-         if (error) {
-            console.log(error);
-         }
-         _file_downlaod({
-            framework,
-            actionType,
-            file: answers.file,
-            element: element,
-            name: name,
-            response: ({ loading, data, error }) => {
-               if (loading) {
-                  console.log("please wait...");
-               }
-               if (data) {
-                  console.log(data);
-               }
-               if (error) {
-                  console.log(error);
-               }
-            },
-         });
-      },
-   });
 }

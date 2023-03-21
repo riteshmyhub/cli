@@ -14,6 +14,9 @@
    },
    "keywords": [],
    "author": "",
+   "bin": {
+      "cli": "./src/index.js"
+   },
    "license": "ISC",
    "bugs": {
       "url": "https://github.com/riteshmyhub/cli/issues"
