@@ -19,11 +19,8 @@ export default async function render({ download_url, fileName, name }) {
 }
 
 function createFile({ fileName, code }) {
-   const [name, extension] = fileName.split(".");
-   const folder = `${process.cwd()}/${name.toLowerCase()}`;
-   fs.mkdirSync(folder);
-   fs.createWriteStream(`${folder}/${fileName}`);
-   fs.appendFile(`${folder}/${fileName}`, code, (error, data) => {
+   fs.createWriteStream(`${process.cwd()}/${fileName}`);
+   fs.appendFile(`${process.cwd()}/${fileName}`, code, (error, data) => {
       if (data) {
          console.log(data);
       }
