@@ -1,6 +1,11 @@
 import axios from "axios";
 import render from "../functions/render.js";
 
+let environment = Object.freeze({
+   production: true,
+   baseUrl: "https://api.github.com/repos/riteshmyhub/cli-source-code/contents/code",
+});
+
 export default class CliService {
    constructor() {}
 
@@ -10,7 +15,7 @@ export default class CliService {
          response({
             loading: true,
          });
-         let { data } = await axios.get("https://api.github.com/repos/riteshmyhub/cli/contents/source-code");
+         let { data } = await axios.get(environment.baseUrl);
          let res_array = [];
          if (data) {
             data.forEach((item) => {
@@ -37,7 +42,7 @@ export default class CliService {
          response({
             loading: true,
          });
-         let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}`);
+         let { data } = await axios.get(`${environment.baseUrl}/${framework}`);
          let res_array = [];
          if (data) {
             data.forEach((item) => {
@@ -63,7 +68,7 @@ export default class CliService {
          response({
             loading: true,
          });
-         let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}`);
+         let { data } = await axios.get(`${environment.baseUrl}/${framework}/${actionType}`);
          let res_array = [];
          if (data) {
             data.forEach((item) => {
@@ -89,7 +94,7 @@ export default class CliService {
          response({
             loading: true,
          });
-         let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}`);
+         let { data } = await axios.get(`${environment.baseUrl}/${framework}/${actionType}/${element}`);
 
          if (data) {
             let res_array = [];
@@ -118,7 +123,7 @@ export default class CliService {
             loading: true,
          });
          if (fileName) {
-            let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}/${fileName}`);
+            let { data } = await axios.get(`${environment.baseUrl}/${framework}/${actionType}/${element}/${fileName}`);
             if (data) {
                render({
                   download_url: data.download_url,
@@ -126,7 +131,7 @@ export default class CliService {
                });
             }
          } else {
-            let { data } = await axios.get(`https://api.github.com/repos/riteshmyhub/cli/contents/source-code/${framework}/${actionType}/${element}`);
+            let { data } = await axios.get(`${environment.baseUrl}/${framework}/${actionType}/${element}`);
             if (data) {
                data.forEach((item) => {
                   render({

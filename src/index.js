@@ -83,7 +83,7 @@ function elementList({ framework, actionType }) {
                   type: "list",
                   message: `select ${actionType} element in ${framework}?`,
                   name: "element",
-                  choices: actionType === "creating" ? data : data.concat("download-all"),
+                  choices: data,
                },
                callback: ({ answers, error }) => {
                   if (error) {
