@@ -6,8 +6,8 @@ export default async function render({ download_url, fileName, name }) {
       let { data } = await axios.get(download_url);
       if (data) {
          if (name) {
-            let [, extension] = fileName.split(".");
-            let fName = name + "." + extension;
+            let fName = fileName.replace("[PlaceHolder]", name);
+            console.log(fName);
             let modifiedData = data.replace(/PlaceHolder/g, name);
             createFile({ fileName: fName, code: modifiedData });
          } else {
