@@ -21,11 +21,11 @@ if (!environment.disabled) {
                name: "framework",
                choices: data,
             },
-            callback: ({ answers, error }) => {
+            callback: ({ answer, error }) => {
                if (error) {
                   console.log(error);
                }
-               actionType(answers?.framework);
+               actionType(answer?.framework);
             },
          });
       }
@@ -50,14 +50,14 @@ if (!environment.disabled) {
                      name: "actionType",
                      choices: data,
                   },
-                  callback: ({ answers, error }) => {
+                  callback: ({ answer, error }) => {
                      if (error) {
                         console.log(error);
                      }
-                     if (answers) {
+                     if (answer) {
                         elementList({
                            framework: framework,
-                           actionType: answers?.actionType,
+                           actionType: answer?.actionType,
                         });
                      }
                   },
@@ -87,14 +87,14 @@ if (!environment.disabled) {
                      name: "element",
                      choices: data,
                   },
-                  callback: ({ answers, error }) => {
+                  callback: ({ answer, error }) => {
                      if (error) {
                         console.log(error);
                      }
                      create_and_download_file({
                         framework,
                         actionType,
-                        element: answers.element,
+                        element: answer.element,
                      });
                   },
                });
@@ -114,13 +114,13 @@ if (!environment.disabled) {
                message: `enter ${element} name?`,
                name: "name",
             },
-            callback: ({ error, answers }) => {
+            callback: ({ error, answer }) => {
                if (error) {
                   console.log(error);
                }
-               if (answers.name) {
+               if (answer.name) {
                   _file_downlaod({
-                     name: answers.name,
+                     name: answer.name,
                      framework,
                      element,
                      actionType,
@@ -157,16 +157,16 @@ if (!environment.disabled) {
                         name: "list",
                         choices: data,
                      },
-                     callback: ({ error, answers }) => {
+                     callback: ({ error, answer }) => {
                         if (error) {
                            console.log(error);
                         }
-                        if (answers) {
+                        if (answer) {
                            _file_downlaod({
                               framework,
                               actionType,
                               element,
-                              fileName: answers?.list,
+                              fileName: answer?.list,
                               response: ({ loading, data, error }) => {
                                  if (loading) {
                                     console.log();
