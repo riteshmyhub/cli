@@ -3,6 +3,8 @@ import inputPrompt from "./cli-prompt/input.prompt.js";
 import listPrompt from "./cli-prompt/list.prompt.js";
 import { environment } from "../environment/environment.js";
 import CliService from "./services/cli.service.js";
+import inquirer from "inquirer";
+const ui = new inquirer.ui.BottomBar();
 
 if (!environment.disabled) {
    const { _get_frameworks_list, _get_action_list, _get_element_list, _get_fetching_element_list, _file_downlaod } = new CliService();
@@ -10,7 +12,7 @@ if (!environment.disabled) {
    // step : 1
    _get_frameworks_list(({ loading, data, error }) => {
       if (loading) {
-         console.log("loading...");
+         ui.log.write("loading...");
       }
       if (data) {
          listPrompt({
