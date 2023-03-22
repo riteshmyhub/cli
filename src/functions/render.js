@@ -1,14 +1,24 @@
 import axios from "axios";
 import fs from "fs";
+import stringPipe from "../utilities/string.js";
 
 export default async function render({ download_url, fileName, name }) {
    try {
       let { data } = await axios.get(download_url);
       if (data) {
          if (name) {
-            let fName = fileName.replace("[PlaceHolder]", name);
-            let modifiedData = data.replace(/PlaceHolder/g, name);
-            createFile({ fileName: fName, code: modifiedData });
+            // placeholder for fileName
+            let fName =
+               fileName.replace("[placeholder]", stringPipe(name, "t-t-l")) || //
+               fileName.replace("[Placeholder]", stringPipe(name, "t-t-c")) || //
+               fileName.replace("[PLACEHOLDER]", stringPipe(name, "t-t-u"));
+            // placeholder in code
+            let code =
+               data.replace(/placeholder/g, stringPipe(name, "t-t-l")) || //
+               data.replace(/Placeholder/g, stringPipe(name, "t-t-c")) || //
+               data.replace(/PLACEHOLDER/g, stringPipe(name, "t-t-u"));
+
+            createFile({ fileName: fName, code: code });
          } else {
             createFile({ fileName: fileName, code: data });
          }
