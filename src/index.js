@@ -112,6 +112,13 @@ if (!environment.disabled) {
                type: "input",
                message: `enter ${element} name?`,
                name: "name",
+               validate: async (input) => {
+                  if (input.match(/^[a-z\-]+$/)) {
+                     return true;
+                  } else {
+                     return "input must be like example : foo or foo-bar";
+                  }
+               },
             },
             callback: ({ error, answer }) => {
                if (error) {
@@ -135,6 +142,8 @@ if (!environment.disabled) {
                         }
                      },
                   });
+               } else {
+                  console.log("Invalue input");
                }
             },
          });
