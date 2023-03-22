@@ -3,7 +3,7 @@ import inputPrompt from "./cli-prompt/input.prompt.js";
 import listPrompt from "./cli-prompt/list.prompt.js";
 import CliService from "./services/cli.service.js";
 
-let isOn = false;
+let isOn = true;
 if (isOn) {
    const { _get_frameworks_list, _get_action_list, _get_element_list, _get_fetching_element_list, _file_downlaod } = new CliService();
 

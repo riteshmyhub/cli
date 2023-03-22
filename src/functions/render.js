@@ -4,21 +4,21 @@ import stringPipe from "../utilities/string.js";
 
 export default async function render({ download_url, fileName, name }) {
    try {
+      console.log("downloading...");
       let { data } = await axios.get(download_url);
       if (data) {
          if (name) {
             // placeholder for fileName
-            let fName =
-               fileName.replace("[placeholder]", stringPipe(name, "t-t-l")) || //
-               fileName.replace("[Placeholder]", stringPipe(name, "t-t-c")) || //
-               fileName.replace("[PLACEHOLDER]", stringPipe(name, "t-t-u"));
+            fileName = fileName.replace("[placeholder]", stringPipe(name, "t-t-l"));
+            fileName = fileName.replace("[Placeholder]", stringPipe(name, "t-t-c"));
+            fileName = fileName.replace("[PLACEHOLDER]", stringPipe(name, "t-t-u"));
             // placeholder in code
-            let code =
-               data.replace(/placeholder/g, stringPipe(name, "t-t-l")) || //
-               data.replace(/Placeholder/g, stringPipe(name, "t-t-c")) || //
-               data.replace(/PLACEHOLDER/g, stringPipe(name, "t-t-u"));
 
-            createFile({ fileName: fName, code: code });
+            data = data.replace(/placeholder/g, stringPipe(name, "t-t-l"));
+            data = data.replace(/Placeholder/g, stringPipe(name, "t-t-c"));
+            data = data.replace(/PLACEHOLDER/g, stringPipe(name, "t-t-u"));
+
+            createFile({ fileName: fileName, code: data });
          } else {
             createFile({ fileName: fileName, code: data });
          }
