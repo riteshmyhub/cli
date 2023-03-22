@@ -2,9 +2,8 @@ CLI tools for fetching JavaScript library and framework files
 
 ### installation
 
-- step 1 : cd /src
-- step 2 : create dir environment
-- Item 3 : create file environment.js
+- step 1 : create dir environment
+- Item 2 : create file environment.js
 
 ``` 
 environment.js

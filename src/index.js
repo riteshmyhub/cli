@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import inputPrompt from "./cli-prompt/input.prompt.js";
 import listPrompt from "./cli-prompt/list.prompt.js";
-import { environment } from "./environment/environment.js";
+import { environment } from "../environment/environment.js";
 import CliService from "./services/cli.service.js";
 
 if (!environment.disabled) {

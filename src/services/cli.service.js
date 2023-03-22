@@ -1,5 +1,5 @@
 import axios from "axios";
-import { environment } from "../environment/environment.js";
+import { environment } from "../../environment/environment.js";
 import render from "../functions/render.js";
 
 export default class CliService {
