@@ -1,10 +1,6 @@
 import axios from "axios";
+import { environment } from "../environment/environment.js";
 import render from "../functions/render.js";
-
-let environment = Object.freeze({
-   production: true,
-   baseUrl: "https://api.github.com/repos/riteshmyhub/cli-source-code/contents/code",
-});
 
 export default class CliService {
    constructor() {}

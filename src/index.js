@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import inputPrompt from "./cli-prompt/input.prompt.js";
 import listPrompt from "./cli-prompt/list.prompt.js";
+import { environment } from "./environment/environment.js";
 import CliService from "./services/cli.service.js";
 
-let isOn = true;
-if (isOn) {
+if (!environment.disabled) {
    const { _get_frameworks_list, _get_action_list, _get_element_list, _get_fetching_element_list, _file_downlaod } = new CliService();
 
    // step : 1
@@ -191,5 +191,3 @@ if (isOn) {
       }
    }
 }
-
-
