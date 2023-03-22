@@ -95,7 +95,7 @@ export default class CliService {
          if (data) {
             let res_array = [];
             data.forEach((item) => {
-               if (item?.type === "file") {
+               if (item?.type === "dir") {
                   res_array.push(item.name);
                }
             });
@@ -118,29 +118,20 @@ export default class CliService {
          response({
             loading: true,
          });
-         if (fileName) {
-            let { data } = await axios.get(`${environment.baseUrl}/${framework}/${actionType}/${element}/${fileName}`);
-            if (data) {
+         let { data } = await axios.get(`${environment.baseUrl}/${framework}/${actionType}/${element}`.concat(fileName ? `/${fileName}` : ""));
+
+         if (data) {
+            data.forEach((item) => {
                render({
-                  download_url: data.download_url,
-                  fileName: data.name,
+                  download_url: item.download_url,
+                  fileName: item.name,
+                  name: name || fileName,
                });
-            }
-         } else {
-            let { data } = await axios.get(`${environment.baseUrl}/${framework}/${actionType}/${element}`);
-            if (data) {
-               data.forEach((item) => {
-                  render({
-                     download_url: item.download_url,
-                     fileName: item.name,
-                     name: name,
-                  });
-               });
-               response({
-                  loading: false,
-                  data: "file successfully download",
-               });
-            }
+            });
+            response({
+               loading: false,
+               data: "file successfully download",
+            });
          }
       } catch (error) {
          response({

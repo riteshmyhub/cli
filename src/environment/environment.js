@@ -4,5 +4,5 @@ dotenv.config();
 export const environment = Object.freeze({
    disabled: false,
    production: true,
-   baseUrl: process.env.BASE_URL,
+   baseUrl: "https://api.github.com/repos/riteshmyhub/cli-source-code/contents/code",
 });

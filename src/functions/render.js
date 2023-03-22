@@ -17,8 +17,7 @@ export default async function render({ download_url, fileName, name }) {
             data = data.replace(/placeholder/g, stringPipe(name, "t-t-l"));
             data = data.replace(/Placeholder/g, stringPipe(name, "t-t-c"));
             data = data.replace(/PLACEHOLDER/g, stringPipe(name, "t-t-u"));
-
-            createFile({ fileName: fileName, code: data });
+            createFile({ fileName: fileName, code: data, folder: name });
          } else {
             createFile({ fileName: fileName, code: data });
          }
@@ -28,14 +27,22 @@ export default async function render({ download_url, fileName, name }) {
    }
 }
 
-function createFile({ fileName, code }) {
-   fs.createWriteStream(`${process.cwd()}/${fileName}`);
-   fs.appendFile(`${process.cwd()}/${fileName}`, code, (error, data) => {
-      if (data) {
-         console.log(data);
+function createFile({ fileName, code, folder }) {
+   if (folder) {
+      let directory_path = process.cwd() + "/" + folder;
+      if (!fs.existsSync(directory_path)) {
+         fs.mkdirSync(directory_path);
       }
-      if (error) {
-         console.log(error);
+      if (fs.existsSync(directory_path)) {
+         fs.createWriteStream(`${directory_path}/${fileName}`);
+         fs.appendFile(`${directory_path}/${fileName}`, code, (error, data) => {
+            if (data) {
+               console.log(data);
+            }
+            if (error) {
+               console.log(error);
+            }
+         });
       }
-   });
+   }
 }

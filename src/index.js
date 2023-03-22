@@ -13,7 +13,6 @@ if (!environment.disabled) {
          console.log("loading...");
       }
       if (data) {
-         console.log(data);
          listPrompt({
             questionObj: {
                type: "list",
