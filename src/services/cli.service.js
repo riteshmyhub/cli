@@ -1,97 +1,12 @@
-import axios from "axios";
-import { environment } from "../../environment/environment.js";
 import render from "../functions/render.js";
+import http from "../http/http.js";
 
 export default class CliService {
    constructor() {}
 
    //1  _frameworks_list
-   async _get_frameworks_list(response) {
-      try {
-         response({
-            loading: true,
-         });
-         let { data } = await axios.get(environment.baseUrl);
-         let res_array = [];
-         if (data) {
-            data.forEach((item) => {
-               if (item?.type === "dir") {
-                  res_array.push(item.name);
-               }
-            });
-            response({
-               loading: false,
-               data: res_array,
-            });
-         }
-      } catch (error) {
-         response({
-            loading: false,
-            error: error?.response?.data,
-         });
-      }
-   }
-
-   //2  _get_action_list
-   async _get_action_list({ framework, response }) {
-      try {
-         response({
-            loading: true,
-         });
-         let { data } = await axios.get(`${environment.baseUrl}/${framework}`);
-         let res_array = [];
-         if (data) {
-            data.forEach((item) => {
-               if (item?.type === "dir") {
-                  res_array.push(item.name);
-               }
-            });
-            response({
-               loading: false,
-               data: res_array,
-            });
-         }
-      } catch (error) {
-         response({
-            loading: false,
-            error: error?.response?.data,
-         });
-      }
-   }
-
-   async _get_element_list({ framework, actionType, response }) {
-      try {
-         response({
-            loading: true,
-         });
-         let { data } = await axios.get(`${environment.baseUrl}/${framework}/${actionType}`);
-         let res_array = [];
-         if (data) {
-            data.forEach((item) => {
-               if (item?.type === "dir") {
-                  res_array.push(item.name);
-               }
-            });
-            response({
-               loading: false,
-               data: res_array,
-            });
-         }
-      } catch (error) {
-         response({
-            loading: false,
-            error: error?.response?.data,
-         });
-      }
-   }
-
-   async _get_fetching_element_list({ framework, actionType, element, response }) {
-      try {
-         response({
-            loading: true,
-         });
-         let { data } = await axios.get(`${environment.baseUrl}/${framework}/${actionType}/${element}`);
-
+   _get_frameworks_list({ response }) {
+      http.get("", (data) => {
          if (data) {
             let res_array = [];
             data.forEach((item) => {
@@ -99,45 +14,67 @@ export default class CliService {
                   res_array.push(item.name);
                }
             });
-            response({
-               loading: false,
-               data: res_array,
-            });
+            response(res_array);
          }
-      } catch (error) {
-         console.log(error);
-         response({
-            loading: false,
-            error: error?.response?.data,
-         });
-      }
+      });
    }
 
-   async _file_downlaod({ framework, actionType, element, fileName, name, response }) {
-      try {
-         response({
-            loading: true,
-         });
-         let { data } = await axios.get(`${environment.baseUrl}/${framework}/${actionType}/${element}`.concat(fileName ? `/${fileName}` : ""));
-
+   //2  _get_action_list
+   _get_action_list({ framework, response }) {
+      http.get(`/${framework}`, (data) => {
          if (data) {
+            let res_array = [];
             data.forEach((item) => {
+               if (item?.type === "dir") {
+                  res_array.push(item.name);
+               }
+            });
+            response(res_array);
+         }
+      });
+   }
+
+   _get_element_list({ framework, actionType, response }) {
+      http.get(`/${framework}/${actionType}`, (data) => {
+         if (data) {
+            let res_array = [];
+            data.forEach((item) => {
+               if (item?.type === "dir") {
+                  res_array.push(item.name);
+               }
+            });
+            response(res_array);
+         }
+      });
+   }
+
+   _get_fetching_element_list({ framework, actionType, element, response }) {
+      http.get(`/${framework}/${actionType}/${element}`, (data) => {
+         if (data) {
+            let res_array = [];
+            data.forEach((item) => {
+               if (item?.type === "dir") {
+                  res_array.push(item.name);
+               }
+            });
+            response(res_array);
+         }
+      });
+   }
+
+   _file_downlaod({ framework, actionType, element, fileName, name, response }) {
+      let url = `/${framework}/${actionType}/${element}`;
+      http.get(url.concat(fileName ? `/${fileName}` : ""), (data) => {
+         if (data) {
+            response(`\nfind ${data?.length} file.`);
+            data.forEach((item, index) => {
                render({
                   download_url: item.download_url,
                   fileName: item.name,
                   name: name || fileName,
                });
             });
-            response({
-               loading: false,
-               data: "file successfully download",
-            });
          }
-      } catch (error) {
-         response({
-            loading: false,
-            error: error?.response?.data,
-         });
-      }
+      });
    }
 }
