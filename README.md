@@ -16,5 +16,5 @@ export const environment = Object.freeze({
 ```
 
 ```
-  npm i js-cli
+  npm i cli -g
 ```
