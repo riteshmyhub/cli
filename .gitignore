@@ -1,5 +1,5 @@
 node_modules
 download
 environment
-credential.config.js
 .env
+auth.config.js

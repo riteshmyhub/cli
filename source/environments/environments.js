@@ -1,10 +1,10 @@
-import credentialConfig from "../../credential.config.js";
+import authConfig from "../../auth.config.js";
 
 const environment = {
-   BASE_URL: `https://api.github.com/repos/${credentialConfig.USERNAME}`,
+   BASE_URL: `https://api.github.com/repos/${authConfig.USERNAME}`,
    headers: {
-      Authorization: `Bearer ${credentialConfig.TOKEN}`,
-      ["X-GitHub-Api-Version"]: credentialConfig.API_VERSION,
+      Authorization: `Bearer ${authConfig.TOKEN}`,
+      ["X-GitHub-Api-Version"]: authConfig.API_VERSION,
    },
 };
 export default environment;
