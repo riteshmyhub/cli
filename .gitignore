@@ -1,5 +1,4 @@
 node_modules
-download
 environment
 .env
 auth.config.js

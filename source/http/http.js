@@ -5,7 +5,7 @@ import chalk from "chalk";
 const http = {
    get: async (endpoint, callback) => {
       let loading = (function () {
-         let frames = ["|", "/", "-", "\\"];
+         let frames = [".", "..", "..", "..."];
          let i = 0;
          return setInterval(() => {
             i = i > 3 ? 0 : i;
@@ -23,7 +23,6 @@ const http = {
          clearInterval(loading);
          callback(data);
       } catch (error) {
-         console.log(error);
          console.log(chalk.bgRed(`\nerror : ${error?.response?.status} ${error?.response?.statusText}`));
          clearInterval(loading);
       }

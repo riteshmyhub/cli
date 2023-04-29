@@ -1,6 +1,7 @@
 import fs from "fs";
 import http from "../../../http/http.js";
 import stringPipe from "../../../utilities/string.pipes.js";
+import message from "../../../utilities/message.js";
 
 export default function render({ download_url, fileName, name }) {
    http.get(download_url, (data) => {
@@ -10,7 +11,7 @@ export default function render({ download_url, fileName, name }) {
             fileName = fileName.replace("[placeholder]", stringPipe(name, "t-t-l"));
             fileName = fileName.replace("[Placeholder]", stringPipe(name, "t-t-c"));
             fileName = fileName.replace("[PLACEHOLDER]", stringPipe(name, "t-t-u"));
-            console.log(`\n ${fileName} download`);
+            message.done(`\n ${fileName} download`);
             // placeholder in code
 
             data = data.replace(/placeholder/g, stringPipe(name, "t-t-l"));

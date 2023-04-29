@@ -1,19 +1,31 @@
 import * as fs from "fs";
 import http from "../../http/http.js";
 import chalk from "chalk";
+import listPrompt from "../../prompts/list.prompt.js";
 
 export default function projectBuilder() {
    let directory_path = process.cwd();
+   listPrompt({
+      questionObj: {
+         type: "list",
+         message: "please select project",
+         name: "project",
+         choices: ["vite-react-app"],
+      },
+      callback: (answer) => {
+         get_app_tree(answer.project);
+      },
+   });
+
    //1 get_app_tree
-   const get_app_tree = () => {
-      http.get("/vite-react-app/git/trees/master?recursive=true", (data) => {
+   const get_app_tree = (project) => {
+      http.get(`/${project}/git/trees/master?recursive=true`, (data) => {
          if (data) {
             console.log(chalk.bgGreen(`\nfind ${data?.tree?.length} files`));
             make_dir_and_file(data?.tree);
          }
       });
    };
-   get_app_tree();
 
    // 2 make dir and file
    const make_dir_and_file = (data) => {
