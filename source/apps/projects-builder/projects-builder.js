@@ -2,7 +2,6 @@ import * as fs from "fs";
 import http from "../../http/http.js";
 import listPrompt from "../../prompts/list.prompt.js";
 import message from "../../utilities/message.js";
-import success_container from "../../utilities/success_container.js";
 
 export default function projectBuilder() {
    let directory_path = process.cwd();
