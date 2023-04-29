@@ -1,7 +1,8 @@
 import * as fs from "fs";
 import http from "../../http/http.js";
-import chalk from "chalk";
 import listPrompt from "../../prompts/list.prompt.js";
+import message from "../../utilities/message.js";
+import success_container from "../../utilities/success_container.js";
 
 export default function projectBuilder() {
    let directory_path = process.cwd();
@@ -21,7 +22,7 @@ export default function projectBuilder() {
    const get_app_tree = (project) => {
       http.get(`/${project}/git/trees/master?recursive=true`, (data) => {
          if (data) {
-            console.log(chalk.bgGreen(`\nfind ${data?.tree?.length} files`));
+            message.bg_primary(`\nfind ${data?.tree?.length} files`);
             make_dir_and_file(data?.tree);
          }
       });

@@ -67,8 +67,6 @@ async function authentication() {
             (await import("./apps/app.js")).default();
          }, 1000);
       };
-
-      // ("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");
    }
    if (fs.existsSync(appurl + "/auth.config.js")) {
       (await import("./apps/app.js")).default();

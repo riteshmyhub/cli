@@ -1,8 +1,8 @@
 import http from "../../http/http.js";
 import inputPrompt from "../../prompts/input.prompt.js";
 import listPrompt from "../../prompts/list.prompt.js";
+import message from "../../utilities/message.js";
 import render from "./functions/render.js";
-import chalk from "chalk";
 
 export default function filesBuilder() {
    let base_endpoint = "/cli-source-code/contents/code";
@@ -126,7 +126,7 @@ export default function filesBuilder() {
       let url = `${base_endpoint}/${framework}/${actionType}/${element}`.concat(child_ele);
       http.get(url, (data) => {
          if (data) {
-            console.log(chalk.bgGreen(`\nfind ${data?.length} file.`));
+            message.bg_primary(`\nfind ${data?.length} file.`);
             data.forEach((item, index) => {
                render({
                   download_url: item.download_url,
