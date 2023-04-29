@@ -33,3 +33,7 @@ export default function stringPipe(str, type) {
       }
    }
 }
+
+//let x = stringPipe('user-name', "t-t-l");
+//let x = stringPipe('user-name', "t-t-c");
+//let x = stringPipe('user-name', "t-t-u");

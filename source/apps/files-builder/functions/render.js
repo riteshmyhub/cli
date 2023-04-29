@@ -1,9 +1,9 @@
 import fs from "fs";
-import http from "../http/http.js";
-import stringPipe from "../utilities/string.js";
+import http from "../../../http/http.js";
+import stringPipe from "../../../utilities/string.pipes.js";
 
-export default async function render({ download_url, fileName, name }) {
-   http.get(`###${download_url}`, (data) => {
+export default function render({ download_url, fileName, name }) {
+   http.get(download_url, (data) => {
       if (data) {
          if (name) {
             // placeholder for fileName
@@ -16,8 +16,8 @@ export default async function render({ download_url, fileName, name }) {
             data = data.replace(/placeholder/g, stringPipe(name, "t-t-l"));
             data = data.replace(/Placeholder/g, stringPipe(name, "t-t-c"));
             data = data.replace(/PLACEHOLDER/g, stringPipe(name, "t-t-u"));
-            createFile({ fileName: fileName, code: data, folder: name });
          }
+         createFile({ fileName: fileName, code: data, folder: name });
       }
    });
 }
