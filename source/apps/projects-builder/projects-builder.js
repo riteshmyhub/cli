@@ -10,7 +10,7 @@ export default function projectBuilder() {
          type: "list",
          message: "please select project",
          name: "project",
-         choices: ["vite-react-app"],
+         choices: ["vite-react-app", "react-typescript-vite"],
       },
       callback: (answer) => {
          get_app_tree(answer.project);

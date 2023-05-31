@@ -6,7 +6,8 @@ import * as fs from "fs";
 import path from "path";
 
 let __dirname = path.dirname(url.fileURLToPath(import.meta.url));
-let appurl = path.join(__dirname, "..", "..");
+console.log(__dirname);
+let appurl = path.join(__dirname, "..", "..", "auth.config.js");
 const http = {
    get: async (endpoint, callback) => {
       let spinner = createSpinner("please wait....").start();
@@ -21,7 +22,7 @@ const http = {
          callback(data);
       } catch (error) {
          if (error?.response?.status === 401) {
-            fs.rmdirSync(appurl + "/auth.config.js", { recursive: true });
+            fs.unlinkSync(appurl);
          }
          spinner.error({
             text: `error : ${error?.response?.status} ${error?.response?.statusText}`,
